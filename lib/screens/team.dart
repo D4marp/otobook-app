@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/start.dart';
 
 class TeamScreen extends StatefulWidget {
   const TeamScreen({Key? key}) : super(key: key);
@@ -8,76 +9,74 @@ class TeamScreen extends StatefulWidget {
 }
 
 class _TeamScreenState extends State<TeamScreen> {
-  // Daftar nama tim
-  List<String> teamNames = ['Dafa M. Irhamni', 'Damar Galih A. P.', 'M. Noer Dafiq', 'Waridatul Jannah', 'Pelangi Kartika C. K.'];
-  List<String> teamJobs = ['Mechanical', 'Electrical', 'Electrical', 'Mobile Dev', 'Creative Desain'];
-  List<String> teamImages = [
-    'assets/images/daffa.png', // Make sure to provide correct paths to your images
-    'assets/images/damar.png',
-    'assets/images/dafiq.png',
-    'assets/images/nana.png',
-    'assets/images/pelangi.png'
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: teamNames.length, // Jumlah persegi panjang yang ingin ditampilkan
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.blue, // Warna latar belakang biru
-                borderRadius: BorderRadius.circular(8.0), // Bordes sudut
+      backgroundColor: Colors.transparent, // Make background transparent
+      body: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white24, // Background color for this section
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20.0), // Rounded corners at the bottom
               ),
-              padding: EdgeInsets.all(16.0), // Padding untuk konten dalam
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 100, // Lebar persegi panjang (gambar) diperbesar
-                    height: 130, // Tinggi persegi panjang (gambar) diperbesar
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 25, 63, 94), // Warna persegi panjang (gambar)
-                      borderRadius: BorderRadius.circular(8.0), // Bordes sudut pada gambar
-                    ),
-                    child: Align(
-                      alignment: Alignment.bottomCenter, // Menempatkan gambar ke bawah
-                    
-                        child: Image.asset(
-                          teamImages[index], // Ganti dengan widget Image atau SvgPicture
-                          fit: BoxFit.cover,
-                          width: 80, // Lebar gambar
-                          height: 130, // Tinggi gambar
-                      
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'My Profile',
+                  style: Theme.of(context).textTheme.headline6?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => StartScreen()),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0), // Adjust padding if needed
+                      child: Image.asset(
+                        'assets/logo_oto.PNG', // Path to the PNG image in assets
+                        height: 40, // Decrease logo size if necessary
                       ),
                     ),
                   ),
-                  SizedBox(width: 16.0), // Jarak antara bagian kiri dan kanan
-                  Expanded(
-                    // Bagian kanan untuk teks atas dan bawah
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          teamNames[index], // Menampilkan nama tim sesuai indeks
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 8.0), // Jarak antara teks atas dan bawah
-                        Text(
-                          teamJobs[index],
-                          style: TextStyle(fontSize: 14),
-                        )
-                      ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hi!, Nana',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  SizedBox(height: 4.0), // Space between texts
+                  Text(
+                    'Selamat datang di Otobook',
+                    style: TextStyle(fontSize: 16),
                   ),
                 ],
               ),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }

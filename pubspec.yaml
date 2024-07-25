@@ -77,14 +77,18 @@ flutter:
     - assets/logo_oto.PNG
     - assets/pic1.svg
     - assets/icon.svg
-    - assets/harry.jpeg
-    - assets/perahu_kertas.jpeg
-    - assets/night.jpg
     - assets/images/daffa.png
     - assets/images/dafiq.png
     - assets/images/damar.png
     - assets/images/nana.png
     - assets/images/pelangi.png
+    - assets/about/about1.svg
+    - assets/about/about2.svg
+    - assets/icon/ai-icon.svg
+    - assets/icon/ocr-icon.svg
+    - assets/m.png
+    - assets/p.png
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
