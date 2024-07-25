@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/about.dart';
-import 'package:frontend/screens/katalog.dart';
-import 'package:frontend/screens/team.dart';
+import 'package:Otobook/screens/about.dart';
+import 'package:Otobook/screens/katalog.dart';
+import 'package:Otobook/screens/team.dart';
 import 'screens/home.dart';
 
 class NavigationMenu extends StatefulWidget {

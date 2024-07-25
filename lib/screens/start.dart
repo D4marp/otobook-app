@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/navigation.dart';
-import 'package:frontend/screens/home.dart';
+import 'package:Otobook/navigation.dart';
+import 'package:Otobook/screens/home.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class StartScreen extends StatelessWidget {
             children: [
               SvgPicture.asset(
                 'assets/pic1.svg', // Path to the SVG image in assets
-                height: 200,
+                height: 180,
               ),
               const SizedBox(height: 20),
               Column(
@@ -28,7 +28,7 @@ class StartScreen extends StatelessWidget {
                     children: [
                       Image.asset(
                         'assets/logo_oto.PNG', // Path to the PNG image in assets
-                        height: 40,
+                        height: 38,
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -67,7 +67,7 @@ class StartScreen extends StatelessWidget {
                     height: 50,
                     alignment: Alignment.center,
                     child: const Text(
-                      'Masuk',
+                      'Get Started',
                       style: TextStyle(color: Colors.white), // Warna teks putih
                     ),
                   ),
