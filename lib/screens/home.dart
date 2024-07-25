@@ -2,6 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/screens/start.dart';
 
+void main() {
+  runApp(App());
+}
+
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomeScreen(),
+    );
+  }
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -10,214 +24,200 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? _frontImagePath1; // Path to the front book image taken for Book 1
-  String? _backImagePath1; // Path to the back book image taken for Book 1
-  String? _frontImagePath2; // Path to the front book image taken for Book 2
-  String? _backImagePath2; // Path to the back book image taken for Book 2
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
 
-  final TextEditingController _titleController1 = TextEditingController();
-  final TextEditingController _authorController1 = TextEditingController();
-  final TextEditingController _summaryController1 = TextEditingController();
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
-  final TextEditingController _titleController2 = TextEditingController();
-  final TextEditingController _authorController2 = TextEditingController();
-  final TextEditingController _sinopsis= TextEditingController();
+  void _onPageChanged(int page) {
+    setState(() {
+      _currentPage = page;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 130, // Mengatur tinggi app bar sesuai dengan ikon
-        automaticallyImplyLeading: false, // Menghapus tombol kembali bawaan
-        title: Row(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            SvgPicture.asset(
-              'assets/icon.svg',
-              height: 100,
-              width: 180, // Mengatur lebar ikon sesuai kebutuhan
-            ),
-            Expanded(child: Container()), // Mengisi sisa ruang kosong di sebelah kanan ikon
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => StartScreen()),
-                  );
-                },
-                child: Image.asset(
-                  'assets/logo_oto.PNG', // Path to the PNG image in assets
-                  height: 50,
+            // Greeting and logo section
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white24, // Background color for this section
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(20.0), // Rounded corners at the bottom
                 ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 178, 166, 182), // Background color for the left side
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(20.0), // Rounded corner at the bottom-right
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Hi!, Nana',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 4.0), // Space between texts
+                            Text(
+                              'Selamat datang di Otobook',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => StartScreen()),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Image.asset(
+                          'assets/logo_oto.PNG', // Path to the PNG image in assets
+                          height: 50,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Space between greeting and carousel
+            SizedBox(height: 20.0), // Adjust the height as needed
+
+            // Carousel section
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.18, // Adjusted height for the carousel
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: _onPageChanged,
+                children: [
+                  _buildPage(
+                    color: Colors.blue,
+                    iconPath: 'assets/icon/ocr-icon.svg',
+                    text1: 'OCR Technology',
+                    text2: 'Untuk Scan Meta Data Bibliografis/Buku',
+                  ),
+                  _buildPage(
+                    color: Colors.orange,
+                    iconPath: 'assets/icon/ai-icon.svg',
+                    text1: 'AI Technology',
+                    text2: 'Untuk Mengklasifikasikan Keywords dari Sinopsis yang di Scan OR',
+                  ),
+                  _buildPage(
+                    color: const Color.fromARGB(255, 111, 0, 255),
+                    iconPath: 'assets/icon/ai-icon.svg',
+                    text1: 'RPA Technology',
+                    text2: 'Robotic Process Automation yang Terintegrasi dengan Perpustakaan',
+                  ),
+                ],
+              ),
+            ),
+            _buildPageIndicator(),
+            SizedBox(height: 20.0), // Space between carousel and images
+
+            // Images with text inside
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                children: [
+                  _buildImageWithText(
+                    'assets/m.png', // Path to the PNG image
+                    'Cara Cepat dan Mudah', // Text inside the first image
+                  ),
+                  SizedBox(height: 20.0), // Space between the images
+                  _buildImageWithText(
+                    'assets/p.png', // Path to the PNG image
+                    'Mengurangi Kesalahan Input', // Text inside the second image
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
-      body: Center(
-        child: SingleChildScrollView(
+    );
+  }
+
+  Widget _buildPage({
+    required Color color,
+    required String iconPath,
+    required String text1,
+    required String text2,
+  }) {
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8, // Adjust width as needed
+        height: MediaQuery.of(context).size.height * 0.3, // Adjust height as needed
+        decoration: BoxDecoration(
+          color: color, // Inner rectangle color
+          borderRadius: BorderRadius.circular(20.0), // Rounded corners
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Default view for both books
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Column(
-                    children: [
-                      Text('Front Book'),
-                      Container(
-                        width: 100,
-                        height: 150,
-                        margin: EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/harry.jpeg', // Replace with the path to your front book image
-                          fit: BoxFit.cover,
+                  SvgPicture.asset(
+                    iconPath, // Path to the SVG icon
+                    width: 40, // Adjust width as needed
+                    height: 40, // Adjust height as needed
+                    placeholderBuilder: (context) => SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                  SizedBox(width: 16.0), // Space between icon and text
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          text1, // The bold text to display
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18, // Adjust font size as needed
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Text('Back Book'),
-                      Container(
-                        width: 100,
-                        height: 150,
-                        margin: EdgeInsets.all(8.0),
-                        child: Image.asset(
-                          'assets/night.jpg', // Replace with the path to your back book image
-                          fit: BoxFit.cover,
+                        SizedBox(height: 4.0), // Space between texts
+                        Text(
+                          text2, // The non-bold text to display
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16, // Adjust font size as needed
+                          ),
+                          overflow: TextOverflow.visible, // Ensure text can wrap and be visible
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 40.0), // Space between books
-              Column(
-                children: [
-                  Text('Front Book'),
-                  Container(
-                    width: 100,
-                    height: 150,
-                    margin: EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      _frontImagePath1 ?? 'assets/harry.jpeg', // Replace with the path to your front book image
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _frontImagePath1 = 'assets/harry.jpeg'; // Path to the taken front book photo
-                      });
-                    },
-                    child: Text('Edit/Crop Front Book'),
-                  ),
-                  SizedBox(height: 20.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextField(
-                      controller: _titleController1,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Book Title',
-                      ),
-                    ),
-                  ),
-                  Text('Back Book'),
-                  Container(
-                    width: 100,
-                    height: 150,
-                    margin: EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      _backImagePath1 ?? 'assets/night.jpg', // Replace with the path to your back book image
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _backImagePath1 = 'assets/night.jpg'; // Path to the taken back book photo
-                      });
-                    },
-                    child: Text('Edit/Crop Back Book'),
-                  ),
-                  SizedBox(height: 20.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextField(
-                      controller: _summaryController1,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Summarize the back book content',
-                      ),
-                      maxLines: 3,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 40.0), // Space between books
-              Column(
-                children: [
-                  Text('Front Book'),
-                  Container(
-                    width: 100,
-                    height: 150,
-                    margin: EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      _frontImagePath2 ?? 'assets/harry.jpeg', // Replace with the path to your front book image
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _frontImagePath2 = 'assets/harry.jpeg'; // Path to the taken front book photo
-                      });
-                    },
-                    child: Text('Edit/Crop Front Book'),
-                  ),
-                  SizedBox(height: 20.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextField(
-                      controller: _authorController2,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Book Author',
-                      ),
-                    ),
-                  ),
-                  Text('Back Book'),
-                  Container(
-                    width: 100,
-                    height: 150,
-                    margin: EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      _backImagePath2 ?? 'assets/night.jpg', // Replace with the path to your back book image
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _backImagePath2 = 'assets/night.jpg'; // Path to the taken back book photo
-                      });
-                    },
-                    child: Text('Edit/Crop Back Book'),
-                  ),
-                  SizedBox(height: 20.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: TextField(
-                      controller: _sinopsis,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'sinopsis',
-                      ),
-                      maxLines: 3,
+                      ],
                     ),
                   ),
                 ],
@@ -229,14 +229,61 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _titleController1.dispose();
-    _authorController1.dispose();
-    _summaryController1.dispose();
-    _titleController2.dispose();
-    _authorController2.dispose();
-    _sinopsis.dispose();
-    super.dispose();
+  Widget _buildPageIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(3, (index) {
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 4.0),
+            width: _currentPage == index ? 12.0 : 8.0,
+            height: _currentPage == index ? 12.0 : 8.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: _currentPage == index ? Colors.white : Colors.grey[400],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildImageWithText(
+    String imagePath, 
+    String text
+  ) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20.0), // Space between images
+      width: MediaQuery.of(context).size.width * 0.8, // Reduced width of the image
+      height: 120, // Adjust height to make image smaller
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12.0), // Rounded corners
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              imagePath, // Path to the PNG image
+              fit: BoxFit.cover,
+            ),
+            Positioned(
+              bottom: 8, // Position text inside the image
+              left: 8,
+              right: 8,
+              child: Text(
+                text, // Text inside the image
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14, // Adjust font size as needed
+                  fontWeight: FontWeight.bold,
+                  backgroundColor: Colors.black54, // Optional background for better readability
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

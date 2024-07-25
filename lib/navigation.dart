@@ -16,7 +16,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   List<Widget> _widgetOptions = <Widget>[
     HomeScreen(), // Halaman HomeScreen dari file terpisah
-   KatalogScreen(), // Halaman lain
+    KatalogScreen(), // Halaman lain
+    AboutScreen(),
     AboutScreen(), // Halaman lain
     TeamScreen(), // Halaman lain
   ];
@@ -32,12 +33,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
     return Scaffold(
       body: Stack(
         children: [
-          for (int i = 0; i < _widgetOptions.length; i++)
-            Visibility(
-              visible: _selectedIndex == i,
-              maintainState: true,
-              child: _widgetOptions[i],
-            ),
+          // Display the selected widget
+          _widgetOptions[_selectedIndex],
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -52,19 +49,33 @@ class _NavigationMenuState extends State<NavigationMenu> {
             label: 'Katalog',
           ),
           BottomNavigationBarItem(
+            icon: SizedBox(width: 40), // Placeholder for scan icon
+            label: '',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.timer_rounded),
             label: 'About',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Team',
+            label: 'Saya',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromARGB(255, 255, 255, 255),
+        selectedItemColor: Colors.white,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed, // Menampilkan semua ikon terus-menerus
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Handle scan icon press
+        },
+        backgroundColor: Color(0xFF005CBE),
+        child: Icon(Icons.camera_alt, color: Colors.white),
+        elevation: 8.0, // Shadow effect
+        highlightElevation: 12.0, // Increased shadow effect on press
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // Center the FAB
     );
   }
 }
