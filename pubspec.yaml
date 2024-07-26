@@ -49,8 +49,7 @@ flutter_native_splash:
   android: true
   ios: true
   web: true
-  resize_mode: cover
-  padding: 100%
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

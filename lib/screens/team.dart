@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:Otobook/screens/start.dart';
 
 class TeamScreen extends StatefulWidget {
-  const TeamScreen({Key? key}) : super(key: key);
+  const TeamScreen({super.key});
 
   @override
   State<TeamScreen> createState() => _TeamScreenState();

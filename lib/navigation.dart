@@ -5,7 +5,7 @@ import 'package:Otobook/screens/team.dart';
 import 'screens/home.dart';
 
 class NavigationMenu extends StatefulWidget {
-  const NavigationMenu({Key? key}) : super(key: key);
+  const NavigationMenu({super.key});
 
   @override
   _NavigationMenuState createState() => _NavigationMenuState();
@@ -38,7 +38,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF005CBE), // Warna latar belakang BottomNavigationBar
+        backgroundColor: Color.fromARGB(255, 255, 255, 255), // Warna latar belakang BottomNavigationBar
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -46,12 +46,13 @@ class _NavigationMenuState extends State<NavigationMenu> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu_book),
-            label: 'Katalog',
+            label: 'List',
           ),
-          BottomNavigationBarItem(
-            icon: SizedBox(width: 40), // Placeholder for scan icon
+            BottomNavigationBarItem(
+            icon: SizedBox.shrink(), 
+            // Placeholder for scan icon
             label: '',
-          ),
+            ),
           BottomNavigationBarItem(
             icon: Icon(Icons.timer_rounded),
             label: 'About',
@@ -62,7 +63,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
+        selectedItemColor: Color(0xFF005CBE),
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed, // Menampilkan semua ikon terus-menerus
       ),
@@ -71,7 +72,12 @@ class _NavigationMenuState extends State<NavigationMenu> {
           // Handle scan icon press
         },
         backgroundColor: Color(0xFF005CBE),
-        child: Icon(Icons.camera_alt, color: Colors.white),
+        child: Icon(Icons.center_focus_weak_sharp, 
+        color: Colors.white,
+        size: 40.0, // Set the icon size (default is 24.0)
+        ),
+        
+        
         elevation: 8.0, // Shadow effect
         highlightElevation: 12.0, // Increased shadow effect on press
       ),

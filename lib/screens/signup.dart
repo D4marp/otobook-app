@@ -192,7 +192,7 @@ class _SignUpState extends State<SignUp> {
                       },
                     ),
                   ),
-                  SizedBox(height: 120),
+                  SizedBox(height: 70),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
