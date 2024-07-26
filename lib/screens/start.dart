@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:Otobook/navigation.dart';
-import 'package:Otobook/screens/home.dart';
+import 'package:Otobook/screens/signin.dart';
+
+
 
 class StartScreen extends StatelessWidget {
   const StartScreen({Key? key}) : super(key: key);
@@ -49,9 +50,9 @@ class StartScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) =>NavigationMenu()),
+                      MaterialPageRoute(builder: (context) => SignIn()),
                     );
-                  },
+                    },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
                       Color.fromRGBO(0, 179, 255, 1), // Warna latar belakang biru muda (#00B3FF)

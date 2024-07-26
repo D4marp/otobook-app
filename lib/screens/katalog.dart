@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/start.dart';
+import 'package:Otobook/screens/start.dart';
 
 class KatalogScreen extends StatefulWidget {
   const KatalogScreen({super.key});

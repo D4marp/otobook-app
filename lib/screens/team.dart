@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/start.dart';
+import 'package:Otobook/screens/start.dart';
 
 class TeamScreen extends StatefulWidget {
   const TeamScreen({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class _TeamScreenState extends State<TeamScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hi!, Nana',
+                    'Hi!, Damar Galih',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
