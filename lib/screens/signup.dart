@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class SignUp extends StatefulWidget {
   @override
@@ -209,34 +209,7 @@ class _SignUpState extends State<SignUp> {
                       minimumSize: Size(double.infinity, 50),
                     ),
                   ),
-                  SizedBox(height: 33),
-                  Text(
-                    'Or Sign Up With',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF111827),
-                      fontSize: 12,
-                      fontFamily: 'Montserrat',
-                      letterSpacing: 0.07,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          // Sign up with Facebook
-                        },
-                        icon: FaIcon(FontAwesomeIcons.facebook),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          // Sign up with Google
-                        },
-                        icon: FaIcon(FontAwesomeIcons.google),
-                      ),
-                    ],
-                  ),
+           
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

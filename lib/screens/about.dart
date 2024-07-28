@@ -40,17 +40,11 @@ class _AboutScreenState extends State<AboutScreen> {
                 _buildPage(
                   svgPath: 'assets/about/about2.svg',
                   text1: 'OTOBOOK',
-                  text2: 'Solusi Pengarsipan Buku Cepat Akurat',
+                  text2: 'Teman Perpustakaanmu',
                   text3: 'Aplikasi ini dibuat untuk mempermudah pengarsipan Meta Data buku di perpustakaan',
                   isBold: true,
                 ),
-                _buildPage(
-                  svgPath: 'assets/about/about2.svg',
-                  text1: '',
-                  text2: 'Minimalisir Kesalahan Input Data dengan OCR dan AI',
-                  text3: 'Otobook dibuat dengan menggunakan teknologi OCR dan Kecerdasan Buatan untuk meminimalisir kesalahan input metadata buku',
-                  isBold: true,
-                ),
+                
               ],
             ),
           ),

@@ -54,8 +54,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
             label: '',
             ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.timer_rounded),
-            label: 'About',
+            icon: Icon(Icons.search),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -72,14 +72,21 @@ class _NavigationMenuState extends State<NavigationMenu> {
           // Handle scan icon press
         },
         backgroundColor: Color(0xFF005CBE),
-        child: Icon(Icons.center_focus_weak_sharp, 
-        color: Colors.white,
-        size: 40.0, // Set the icon size (default is 24.0)
+        child: Stack(
+          children: [
+        Icon(
+          Icons.center_focus_weak_sharp,
+          color: Colors.white,
+          size: 30.0, // Set the icon size (default is 24.0)
         ),
-        
-        
+          ],
+        ),
         elevation: 8.0, // Shadow effect
         highlightElevation: 12.0, // Increased shadow effect on press
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.white, width: 2.0),
+          borderRadius: BorderRadius.circular(28.0),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked, // Center the FAB
     );

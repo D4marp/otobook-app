@@ -71,17 +71,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hi!, Damar Galih',
+                              'Hi!, Damar',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 4.0), // Space between texts
-                            Text(
-                              'Selamat datang di Otobook',
-                              style: TextStyle(fontSize: 16),
-                            ),
+                            SizedBox(height: 1.0), // Space between texts
+                          
                           ],
                         ),
                       ),
@@ -149,13 +146,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   _buildImageWithText(
                     'assets/m.png', // Path to the PNG image
-                    'Cara Cepat dan Mudah', // Text inside the first image
+                    ''// Text inside the first image
                   ),
                   SizedBox(height: 20.0), // Space between the images
                   _buildImageWithText(
-                    'assets/p.png', // Path to the PNG image
-                    'Mengurangi Kesalahan Input', // Text inside the second image
+                    'assets/p.png',
+                    ''// Path to the PNG image
                   ),
+                
                 ],
               ),
             ),

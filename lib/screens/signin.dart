@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:Otobook/screens/signup.dart'; // Ensure this import is correct
 import 'package:Otobook/navigation.dart'; // Ensure this import is correct
 
@@ -168,34 +167,7 @@ class _SignInState extends State<SignIn> {
                       minimumSize: Size(double.infinity, 50), // Button size
                     ),
                   ),
-                  SizedBox(height: 114), // Adjusted height for spacing
-                  Text(
-                    'Or Sign In With',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xFF111827),
-                      fontSize: 12,
-                      fontFamily: 'Montserrat',
-                      letterSpacing: 0.07,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          // Sign in with Facebook
-                        },
-                        icon: FaIcon(FontAwesomeIcons.facebook),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          // Sign in with Google
-                        },
-                        icon: FaIcon(FontAwesomeIcons.google),
-                      ),
-                    ],
-                  ),
+               
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
