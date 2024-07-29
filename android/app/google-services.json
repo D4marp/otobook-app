@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "444465712065",
+    "project_id": "otobook-732a5",
+    "storage_bucket": "otobook-732a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444465712065:android:32654ba6011cf0c920fd40",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPZ9o9XGaXYoF0s-Q2WAYMdPFIVhS1JFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444465712065:android:7e5619a4a672572620fd40",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPZ9o9XGaXYoF0s-Q2WAYMdPFIVhS1JFs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

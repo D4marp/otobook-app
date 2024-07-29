@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:Otobook/screens/start.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(App());
@@ -11,15 +13,13 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen(),
+      home: HomeScreen(),
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
-  
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -28,6 +28,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
+  String _userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  Future<void> _loadUserName() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      setState(() {
+        _userName = userDoc['name'] ?? 'User';
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -71,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Hi!, Damar',
+                              'Hi!, $_userName',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -94,10 +111,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.all(50.0),
                         child: Image.asset(
                           'assets/logo_oto.PNG', // Path to the PNG image in assets
-                          height: 50,
+                          height: 40,
                         ),
                       ),
                     ),
@@ -106,38 +123,37 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             // Space between greeting and carousel
-            SizedBox(height: 20.0), // Adjust the height as needed
-
-            // Carousel section
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.18, // Adjusted height for the carousel
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: _onPageChanged,
-                children: [
-                  _buildPage(
-                    color: Colors.blue,
-                    iconPath: 'assets/icon/ocr-icon.svg',
-                    text1: 'OCR Technology',
-                    text2: 'Untuk Scan Meta Data Bibliografis/Buku',
-                  ),
-                  _buildPage(
-                    color: Colors.orange,
-                    iconPath: 'assets/icon/ai-icon.svg',
-                    text1: 'AI Technology',
-                    text2: 'Untuk Mengklasifikasikan Keywords dari Sinopsis yang di Scan OR',
-                  ),
-                  _buildPage(
-                    color: const Color.fromARGB(255, 111, 0, 255),
-                    iconPath: 'assets/icon/ai-icon.svg',
-                    text1: 'RPA Technology',
-                    text2: 'Robotic Process Automation yang Terintegrasi dengan Perpustakaan',
-                  ),
-                ],
-              ),
-            ),
-            _buildPageIndicator(),
-            SizedBox(height: 20.0), // Space between carousel and images
+            SizedBox(height: 5.0), // Adjust the height as needed
+           // Carousel section
+SizedBox(
+  height: MediaQuery.of(context).size.height * 0.18, // Adjusted height for the carousel
+  child: PageView(
+    controller: _pageController,
+    onPageChanged: _onPageChanged,
+    children: [
+      _buildPage(
+        color: Colors.blue,
+        iconPath: 'assets/icon/ocr-icon.svg',
+        text1: 'OCR Technology',
+        text2: 'Untuk Scan Meta Data Bibliografis/Buku',
+      ),
+      _buildPage(
+        color: Colors.orange,
+        iconPath: 'assets/icon/ai-icon.svg',
+        text1: 'AI Technology',
+        text2: 'Untuk Mengklasifikasikan Keywords dari Sinopsis yang di Scan OR',
+      ),
+      _buildPage(
+        color: const Color.fromARGB(255, 111, 0, 255),
+        iconPath: 'assets/icon/ai-icon.svg',
+        text1: 'RPA Technology',
+        text2: 'Robotic Process Automation yang Terintegrasi dengan Perpustakaan',
+      ),
+    ],
+  ),
+),
+_buildPageIndicator(),
+SizedBox(height: 20.0), // Space between carousel and images
 
             // Images with text inside
             Container(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:Otobook/navigation.dart'; // Import your navigation page
 
 class SignUp extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class _SignUpState extends State<SignUp> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool _obscureText = true;
+  String? _errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class _SignUpState extends State<SignUp> {
           },
         ),
         title: Text(
-          'Create Account',
+          'Sign Up',
           style: TextStyle(
             color: Color(0xFF3C83F5),
             fontSize: 20,
@@ -46,7 +49,7 @@ class _SignUpState extends State<SignUp> {
               child: Opacity(
                 opacity: 0.50,
                 child: Text(
-                  'Create an account to enjoy OTOBOOK privileges and features.',
+                  'Sign up now and enjoy OTOBOOK privileges never existed before.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF111827),
@@ -59,186 +62,75 @@ class _SignUpState extends State<SignUp> {
               ),
             ),
             SizedBox(height: 20),
+            if (_errorMessage != null)
+              Text(
+                _errorMessage!,
+                style: TextStyle(color: Colors.red),
+              ),
             Form(
               key: _formKey,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        labelText: 'Name',
-                        border: InputBorder.none,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your name';
-                        }
-                        return null;
+                  _buildTextFormField(
+                    controller: nameController,
+                    label: 'Name',
+                    validator: (value) => value == null || value.isEmpty ? 'Please enter your name' : null,
+                  ),
+                  SizedBox(height: 16.0),
+                  _buildTextFormField(
+                    controller: usernameController,
+                    label: 'Username',
+                    validator: (value) => value == null || value.isEmpty ? 'Please enter a username' : null,
+                  ),
+                  SizedBox(height: 16.0),
+                  _buildTextFormField(
+                    controller: emailController,
+                    label: 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) => value == null || value.isEmpty ? 'Please enter your email' : null,
+                  ),
+                  SizedBox(height: 16.0),
+                  _buildTextFormField(
+                    controller: passwordController,
+                    label: 'Password',
+                    obscureText: _obscureText,
+                    suffixIcon: IconButton(
+                      icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
                       },
                     ),
+                    validator: (value) => value == null || value.isEmpty ? 'Please enter a password' : null,
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: TextFormField(
-                      controller: usernameController,
-                      decoration: InputDecoration(
-                        labelText: 'Username',
-                        border: InputBorder.none,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        border: InputBorder.none,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: TextFormField(
-                      controller: passwordController,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        border: InputBorder.none,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscureText ? Icons.visibility_off : Icons.visibility,
-                            color: Color.fromARGB(255, 172, 170, 170),
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              _obscureText = !_obscureText;
-                            });
-                          },
-                        ),
-                      ),
-                      obscureText: _obscureText,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 70),
+                  SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
-                        // Proses sign up
-                        Navigator.pop(context);
+                        signUp();
                       }
                     },
-                    child: Text(
-                      'Sign Up',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    child: Text('Sign Up'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF3C83F5),
                       minimumSize: Size(double.infinity, 50),
                     ),
                   ),
-           
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Already have an account? ',
-                        style: TextStyle(
-                          color: Color(0xFF111827),
-                          fontSize: 12,
-                          fontFamily: 'Montserrat',
-                          letterSpacing: 0.07,
-                        ),
+                  SizedBox(height: 8.0),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Already have an account? Sign In',
+                      style: TextStyle(
+                        color: Color(0xFF3C83F5),
+                        fontSize: 12,
+                        fontFamily: 'Montserrat',
+                        letterSpacing: 0.07,
                       ),
-                      TextButton(
-                        onPressed: () {
-                          // Navigate to sign in page
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: Color(0xFF3C83F5),
-                            fontSize: 12,
-                            fontFamily: 'Montserrat',
-                            letterSpacing: 0.07,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -247,6 +139,67 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  Widget _buildTextFormField({
+    required TextEditingController controller,
+    required String label,
+    TextInputType? keyboardType,
+    bool obscureText = false,
+    Widget? suffixIcon,
+    String? Function(String?)? validator,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: InputBorder.none,
+          suffixIcon: suffixIcon,
+        ),
+        keyboardType: keyboardType,
+        obscureText: obscureText,
+        validator: validator,
+      ),
+    );
+  }
+
+  Future<void> signUp() async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
+        'name': nameController.text,
+        'username': usernameController.text,
+        'email': emailController.text,
+      });
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => NavigationMenu()), // Navigasi ke halaman home
+      );
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+      });
+    }
   }
 
   @override
