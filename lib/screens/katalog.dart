@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:Otobook/models/book.dart';
+import 'package:Otobook/services/firestore_service.dart';
 import 'package:Otobook/screens/start.dart';
 
 class KatalogScreen extends StatefulWidget {
@@ -36,14 +38,14 @@ class _KatalogScreenState extends State<KatalogScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent, // Make background transparent
+      backgroundColor: Colors.transparent,
       body: Column(
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white24, // Background color for this section
+              color: Colors.white24,
               borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(20.0), // Rounded corners at the bottom
+                bottom: Radius.circular(20.0),
               ),
             ),
             child: Row(
@@ -51,17 +53,16 @@ class _KatalogScreenState extends State<KatalogScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    width: 150, // Set a specific width for the button
+                    width: 150,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle button press for list of books
-                        print('List of Books button pressed');
+                        print('Add Books button pressed');
                       },
-                      child: Text('List of Books'),
+                      child: Text('Add Books'),
                     ),
                   ),
                 ),
-                Spacer(), // Push the logo to the right
+                Spacer(),
                 MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: GestureDetector(
@@ -72,10 +73,10 @@ class _KatalogScreenState extends State<KatalogScreen> {
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0), // Adjust padding if needed
+                      padding: const EdgeInsets.all(8.0),
                       child: Image.asset(
-                        'assets/logo_oto.PNG', // Path to the PNG image in assets
-                        height: 40, // Decrease logo size if necessary
+                        'assets/logo_oto.PNG',
+                        height: 40,
                       ),
                     ),
                   ),
@@ -86,42 +87,34 @@ class _KatalogScreenState extends State<KatalogScreen> {
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTextField(_judulController, 'Judul', 'Please enter the title'),
-                  SizedBox(height: 16.0),
-                  _buildTextField(_pengarangController, 'Pengarang', 'Please enter the author'),
-                  SizedBox(height: 16.0),
-                  _buildTextField(_penerbitController, 'Penerbit', 'Please enter the publisher'),
-                  SizedBox(height: 16.0),
-                  _buildTextField(_tahunTerbitController, 'Tahun Terbit', 'Please enter the year of publication'),
-                  SizedBox(height: 16.0),
-                  _buildTextField(_isbnController, 'ISBN', 'Please enter the ISBN'),
-                  SizedBox(height: 16.0),
-                  _buildTextField(_sinopsisController, 'Sinopsis', 'Please enter the synopsis'),
-                  SizedBox(height: 16.0),
-                  _buildTextField(_keywordController, 'Keyword', 'Please enter keywords'),
-                  SizedBox(height: 32.0), // Space for the button
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          // Handle form submission
-                          print('Judul: ${_judulController.text}');
-                          print('Pengarang: ${_pengarangController.text}');
-                          print('Penerbit: ${_penerbitController.text}');
-                          print('Tahun Terbit: ${_tahunTerbitController.text}');
-                          print('ISBN: ${_isbnController.text}');
-                          print('Sinopsis: ${_sinopsisController.text}');
-                          print('Keyword: ${_keywordController.text}');
-                        }
-                      },
-                      child: Text('Submit'),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTextField(_judulController, 'Judul', 'Please enter the title'),
+                    SizedBox(height: 16.0),
+                    _buildTextField(_pengarangController, 'Pengarang', 'Please enter the author'),
+                    SizedBox(height: 16.0),
+                    _buildTextField(_penerbitController, 'Penerbit', 'Please enter the publisher'),
+                    SizedBox(height: 16.0),
+                    _buildTextField(_tahunTerbitController, 'Tahun Terbit', 'Please enter the year of publication'),
+                    SizedBox(height: 16.0),
+                    _buildTextField(_isbnController, 'ISBN', 'Please enter the ISBN'),
+                    SizedBox(height: 16.0),
+                    _buildTextField(_sinopsisController, 'Sinopsis', 'Please enter the synopsis'),
+                    SizedBox(height: 16.0),
+                    _buildTextField(_keywordController, 'Keyword', 'Please enter keywords'),
+                    SizedBox(height: 32.0),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        onPressed: _submitForm,
+                        child: Text('Submit'),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -130,7 +123,6 @@ class _KatalogScreenState extends State<KatalogScreen> {
     );
   }
 
-  // Helper method to build text fields
   Widget _buildTextField(TextEditingController controller, String labelText, String validationMessage) {
     return TextFormField(
       controller: controller,
@@ -145,5 +137,25 @@ class _KatalogScreenState extends State<KatalogScreen> {
         return null;
       },
     );
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState?.validate() ?? false) {
+      final book = Book(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        title: _judulController.text,
+        author: _pengarangController.text,
+        publisher: _penerbitController.text,
+        publicationYear: int.tryParse(_tahunTerbitController.text) ?? 0,
+        ISBN: _isbnController.text,
+        synopsis: _sinopsisController.text,
+        keywords: _keywordController.text.split(',').map((e) => e.trim()).toList(),
+      );
+
+      FirestoreService().addBook(book);
+
+      // Clear form
+      _formKey.currentState?.reset();
+    }
   }
 }

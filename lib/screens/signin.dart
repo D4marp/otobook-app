@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:Otobook/screens/signup.dart'; // Ensure this import is correct
-import 'package:Otobook/navigation.dart'; // Ensure this import is correct
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth package
+import 'package:Otobook/screens/signup.dart';
+import 'package:Otobook/navigation.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -11,16 +12,18 @@ class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  bool _obscureText = true; // Added for password visibility toggle
+  bool _obscureText = true;
+  final FirebaseAuth _auth = FirebaseAuth.instance; // Instance of FirebaseAuth
+  String? _errorMessage; // To hold error messages
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color.fromARGB(255, 176, 176, 176)), // Changed color to match theme
+          icon: Icon(Icons.arrow_back, color: Color.fromARGB(255, 176, 176, 176)),
           onPressed: () {
-            Navigator.pop(context); // Navigate back when pressed
+            Navigator.pop(context);
           },
         ),
         title: Text(
@@ -45,7 +48,7 @@ class _SignInState extends State<SignIn> {
               child: Opacity(
                 opacity: 0.50,
                 child: Text(
-                  'Sign up now and enjoy OTOBOOK privileges never existed before.',
+                  'Sign in now and enjoy OTOBOOK privileges never existed before.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF111827),
@@ -57,7 +60,12 @@ class _SignInState extends State<SignIn> {
                 ),
               ),
             ),
-            SizedBox(height: 20), // Spacing
+            SizedBox(height: 20),
+            if (_errorMessage != null) // Display error message
+              Text(
+                _errorMessage!,
+                style: TextStyle(color: Colors.red),
+              ),
             Form(
               key: _formKey,
               child: Column(
@@ -152,22 +160,33 @@ class _SignInState extends State<SignIn> {
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => NavigationMenu()), // Navigate to NavigationMenu
-                      );
+                    onPressed: () async {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        try {
+                          UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => NavigationMenu()),
+                          );
+                        } on FirebaseAuthException catch (e) {
+                          setState(() {
+                            _errorMessage = e.message;
+                          });
+                        }
+                      }
                     },
                     child: Text(
                       'Sign In',
                       style: TextStyle(color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF3C83F5), // Button color
-                      minimumSize: Size(double.infinity, 50), // Button size
+                      backgroundColor: Color(0xFF3C83F5),
+                      minimumSize: Size(double.infinity, 50),
                     ),
                   ),
-               
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -185,7 +204,7 @@ class _SignInState extends State<SignIn> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SignUp()), // Navigate to SignUp
+                            MaterialPageRoute(builder: (context) => SignUp()),
                           );
                         },
                         child: Text(
